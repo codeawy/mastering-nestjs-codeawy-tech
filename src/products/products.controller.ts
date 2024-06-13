@@ -6,13 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { UppercasePipe } from 'src/pipes/uppercase/uppercase.pipe';
+import { LoggingInterceptor } from 'src/interceptors/logging/logging.interceptor';
 
 @Controller('products')
+@UseInterceptors(LoggingInterceptor)
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
