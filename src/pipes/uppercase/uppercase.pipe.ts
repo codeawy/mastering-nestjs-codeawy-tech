@@ -13,6 +13,6 @@ export class UppercasePipe implements PipeTransform {
         'Invalid product title, it must be a string',
       );
     }
-    return value.title.toUpperCase();
+    return value;
   }
 }
