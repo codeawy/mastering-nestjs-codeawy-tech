@@ -6,27 +6,36 @@ import {
   Patch,
   Param,
   Delete,
-  UseInterceptors,
+  Version,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { UppercasePipe } from 'src/pipes/uppercase/uppercase.pipe';
-import { LoggingInterceptor } from 'src/interceptors/logging/logging.interceptor';
 
-@Controller('products')
-@UseInterceptors(LoggingInterceptor)
+@Controller({
+  path: 'products',
+})
+
+// ** /v1/products => Production
+// ** /v2/products => Development
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body(UppercasePipe) createProductDto: CreateProductDto) {
+  create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
 
   @Get()
+  @Version('1')
   findAll() {
     return this.productsService.findAll();
+  }
+
+  @Get()
+  @Version('2')
+  findAllV2() {
+    return this.productsService.findAllV2();
   }
 
   @Get(':id')
